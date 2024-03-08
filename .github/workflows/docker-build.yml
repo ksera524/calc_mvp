@@ -1,0 +1,39 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to Harbor
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login qroksera.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Get the date and time
+        run: echo "BUILD_DATETIME=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+
+      - name: Build and push Docker Image
+        run: |
+          docker build . --file Dockerfile \
+            --tag qroksera.com/sandbox/calc_mvp:${{ env.BUILD_DATETIME }} 
+          docker push qroksera.com/sandbox/calc_mvp:${{ env.BUILD_DATETIME }}
+
+      - name: Update manifest
+        run: |
+          sed -i "s|image: .*|image: qroksera.com/sandbox/calc_mvp:${{ env.BUILD_DATETIME }}|" manifest/manifest.yaml
+
+      - name: Commit and push manifest
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add manifest/manifest.yaml
+          git commit -m "Update manifest to ${{ env.BUILD_DATETIME }}"
+          git push

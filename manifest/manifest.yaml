@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: calc_mvp
+  namespace: sandbox
+spec:
+  schedule: "30 8 * * 2-6"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: calc_mvp
+              image: qroksera.com/sandbox/calc_mvp:202403060622
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: slack-secret
+                      key: token
+                - name: CHANNEL
+                  valueFrom:
+                    secretKeyRef:
+                      name: slack-secret
+                      key: channel
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgre
+                      key: uri
+          imagePullSecrets:
+            - name: harbor
+          restartPolicy: OnFailure

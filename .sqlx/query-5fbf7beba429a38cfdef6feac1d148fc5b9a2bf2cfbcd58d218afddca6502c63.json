@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT stock_symbol, array_agg(price ORDER BY date DESC) as prices, array_agg(volume ORDER BY date DESC) as volumes\n        FROM (\n            SELECT *,\n            ROW_NUMBER() OVER (PARTITION BY stock_symbol ORDER BY date DESC) AS rn\n            FROM stock_prices\n        ) ranked_prices\n        WHERE rn <= 15\n        GROUP BY stock_symbol",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "stock_symbol",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "prices",
+        "type_info": "NumericArray"
+      },
+      {
+        "ordinal": 2,
+        "name": "volumes",
+        "type_info": "Int8Array"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "5fbf7beba429a38cfdef6feac1d148fc5b9a2bf2cfbcd58d218afddca6502c63"
+}
