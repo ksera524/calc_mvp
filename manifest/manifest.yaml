@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: calc_mvp
+  name: calc-mvp
   namespace: sandbox
 spec:
   schedule: "30 8 * * 2-6"
