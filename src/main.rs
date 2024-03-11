@@ -112,7 +112,7 @@ fn check_mvp(stock_record: &StockRecord) -> bool {
     let v_result = volume_ratio >= dec!(0.25);//出来高が25％以上増える
     let p_result = price_ratio >= dec!(0.20);//株価が20％以上の上
 
-    println!("条件1: {} 条件2: {} 条件3: {}", m_result, v_result, p_result);
+    //println!("条件1: {} 条件2: {} 条件3: {}", m_result, v_result, p_result);
 
     // Decimalとf64の比較に注意が必要。適宜、Decimal型の値を使用する
     m_result && v_result && p_result
