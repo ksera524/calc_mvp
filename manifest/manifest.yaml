@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: calc-mvp
-              image: qroksera.com/sandbox/calc_mvp:202403080702
+              image: qroksera.com/sandbox/calc_mvp:202403080711
               imagePullPolicy: IfNotPresent
               env:
                 - name: TOKEN
