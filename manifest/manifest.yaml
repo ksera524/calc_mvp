@@ -4,7 +4,7 @@ metadata:
   name: calc-mvp
   namespace: sandbox
 spec:
-  schedule: "30 8 * * 2-6"
+  schedule: "35 8 * * 2-6"
   jobTemplate:
     spec:
       template:
